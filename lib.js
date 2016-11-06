@@ -154,6 +154,7 @@ function BranchAndBound (self) {
 
 		while (path_queue.length > 0) {
 			var removedPath = path_queue.splice(0, 1)[0];
+			console.log("REMOVED ", removedPath.toString());
 			var lastVertex = removedPath.getLastVertex();
 
 			if (lastVertex.getId() == v2) {
@@ -167,6 +168,8 @@ function BranchAndBound (self) {
 			visiteds[lastVertex.getId()] = true;
 
 			currentNeighbors = graph.getNeighbors(lastVertex.getId());
+			
+			console.log("QUEUE STATE ", path_queue.toString());
 
 			for (var i = 0; i < currentNeighbors.length; i++) {
 				var neighborData = currentNeighbors[i];
@@ -177,15 +180,21 @@ function BranchAndBound (self) {
 
 				if (path.isGoingBack()) continue;
 
-				if (path_queue[0] && path_queue[0].getCost() > path.getCost()) {
-					path_queue.splice(0, 0, path);
-				} else {
-					path_queue.push(path);
+				var index = path_queue.length;
+				for (var t=0; t<path_queue.length; t++) {
+
+					if (path.getCost() <= path_queue[t].getCost()) {
+						index = t;
+						break;
+					}
 				}
+				path_queue.splice(index, 0, path);
+
+				console.log("ADDED ", path.toString());
 
 			}
 
-			console.log(path_queue.toString());
+			console.log("QUEUE STATE ", path_queue.toString());
 			
 		}
 		return null;

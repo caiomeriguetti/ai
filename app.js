@@ -62,8 +62,15 @@ function find_path (orig, dest) {
 	var bb = new BranchAndBound({});
 
 	var path = bb.pathFind(graph, orig, dest);
+	var vertices = path.getVertices();
+	var names = [];
+	for (var i = 0; i < vertices.length; i++) {
+		var vid = vertices[i].getId();
+		var val = $('[data-num="'+vid+'"]').val();
+		names.push(val);
+	}
 
-	console.log(path.toString());
+	$(".result").html(names.join(",") + " = " + path.getCost());
 }
 
 function test_data() {
@@ -102,6 +109,10 @@ $(function () {
 		if (name != "") {
 			$('body [data-namefor="'+num+'"]').html(name);
 		}
+	});
+
+	$("#find-path").click(function () {
+		find_path($("#origin").val(), $("#dest").val());
 	});
 
 	
