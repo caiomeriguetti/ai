@@ -1,6 +1,6 @@
 function create_inputs(n) {
 	var namesElement = $("<ul></ul>");
-
+	$("#origin, #dest").children().remove();
 	$("#origin").append("<option >Origin</option>");
 	$("#dest").append("<option >Destination</option>");
 
@@ -42,8 +42,9 @@ function create_inputs(n) {
 
 }
 
-var graph = new Graph({});
+var graph;
 function calculate_neighbors () {
+	graph = new Graph({});
 	$("[data-edge]").each(function (index, item) {
 		
 		var edge = $(item).data('edge').split('-');
@@ -67,6 +68,11 @@ function find_path (orig, dest) {
 	for (var i = 0; i < vertices.length; i++) {
 		var vid = vertices[i].getId();
 		var val = $('[data-num="'+vid+'"]').val();
+
+		if (!val) {
+			val = vid;
+		}
+		
 		names.push(val);
 	}
 
@@ -101,6 +107,10 @@ $(function () {
 
 	$("#create-inputs").click(function () {
 		create_inputs($("#num-vertices").val());
+	});
+
+	$("#test-data").click(function () {
+		test_data();
 	});
 
 	$(document).on("keyup", "[data-num]", function (){
